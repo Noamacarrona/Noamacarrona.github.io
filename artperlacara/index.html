@@ -1,0 +1,463 @@
+
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+  <meta charset="UTF-8">
+  <title>Art Geomètric Amb Expressió Facial</title>
+  <!-- Llibreria p5.js per fer gràfics interactius -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.11.3/p5.js"></script>
+  <!-- Llibreria ml5.js per reconeixement facial amb machine learning -->
+  <script src="https://cdn.jsdelivr.net/gh/ml5js/Intro-ML-Arts-IMA@ml5-build-10-7-19/ml5_build/ml5.min.js"></script>
+  <style>
+    /* Estil general del cos de la pàgina */
+    body {
+      margin: 0; /* sense marges externs */
+      padding: 0; /* sense espais interns */
+      background-color: #f4f4f4; /* color de fons gris clar */
+      display: flex; /* fa servir flexbox per alinear */
+      justify-content: center; /* centra horitzontalment */
+      align-items: center; /* centra verticalment */
+      height: 100vh; /* alçada de tota la pantalla */
+    }
+
+    /* Pantalla de càrrega quan els models encara es carreguen */
+    #loading-screen {
+      position: fixed; /* fixa la posició a la pantalla */
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(255,255,255,0.9); /* blanc amb transparència */
+      display: flex;
+      flex-direction: column; /* columna vertical */
+      justify-content: center;
+      align-items: center;
+      font-family: Arial, sans-serif;
+      font-size: 18px;
+      color: #333; /* gris fosc */
+      z-index: 10; /* per sobre de tot */
+    }
+
+    /* Rodona animada de càrrega */
+    .loader {
+      width: 50px;
+      height: 50px;
+      border: 6px solid #3498db; /* blau */
+      border-top: 6px solid transparent;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin-bottom: 10px;
+    }
+
+    /* Animació de gir */
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+  </style>
+</head>
+<body>
+  <!-- Div visible mentre es carreguen els models -->
+  <div id="loading-screen">
+    <div class="loader"></div>
+    <p>Carregant models, si us plau, espera...</p>
+  </div>
+  <script>
+    // Variables globals
+    let faceapi, detections = [], video;
+    let modelsMostrats = false;
+
+    // Mida virtual que es manté proporcional a qualsevol pantalla
+    const VIRTUAL_W = 800;
+    const VIRTUAL_H = 600;
+
+    // Funció que es crida al començar
+    function setup() {
+      createCanvas(windowWidth, windowHeight); // crea una zona de dibuix de la mida de la finestra
+      video = createCapture(VIDEO);            // activa la webcam
+      video.size(480, 480);                    // estableix la mida del vídeo
+      video.hide();                            // amaga el vídeo per defecte
+
+      // Configura els paràmetres del reconeixement facial
+      const options = {
+        withLandmarks: true,
+        withExpressions: true,
+        withDescriptors: false
+      };
+      faceapi = ml5.faceApi(video, options, modelReady); // inicialitza el model amb la webcam
+    }
+
+    // Redimensiona el canvas si canvia la mida de la finestra
+    function windowResized() {
+      resizeCanvas(windowWidth, windowHeight);
+    }
+
+    // Quan el model està carregat correctament
+    function modelReady() {
+      faceapi.detect(gotResults); // comença a detectar cares
+    }
+
+    // Quan hi ha resultats del model
+    function gotResults(err, result) {
+      if (err) return console.error(err); // mostra error si hi ha
+      detections = result; // desa les dades de la detecció
+      if (!modelsMostrats) {
+        document.getElementById("loading-screen").style.display = "none";
+        modelsMostrats = true;
+      }
+      faceapi.detect(gotResults); // torna a detectar de forma continua
+    }
+
+    // Funció de dibuix
+    function draw() {
+      background(255); // fons blanc
+
+      // Inicialitzem l'estat emocional detectat
+      let dominant = "neutral", intensity = 0;
+      if (detections.length > 0) {
+        let expr = detections[0].expressions;
+        dominant = Object.keys(expr).reduce((a, b) => expr[a] > expr[b] ? a : b);
+        intensity = expr[dominant];
+      }
+
+      // Calcular escala i marges per centrar el dibuix virtual a la pantalla
+      let scaleFactor = min(width / VIRTUAL_W, height / VIRTUAL_H);
+      let offsetX = (width - VIRTUAL_W * scaleFactor) / 2;
+      let offsetY = (height - VIRTUAL_H * scaleFactor) / 2;
+
+      // Aplicar transformacions per mantenir el dibuix centrat i escalat
+      push(); // desa l'estat de transformació
+      translate(offsetX, offsetY); // desplaça l'origen
+      scale(scaleFactor); // redimensiona proporcionalment
+      drawArt(dominant, intensity); // dibuixa la figura segons l'expressió
+      pop(); // recupera l'estat anterior
+
+      // Mostra el text amb l'expressió dominant (fora de transformacions)
+      noStroke();
+      fill(44,169,225);
+      textSize(32);
+      textAlign(CENTER, TOP);
+      text("Expressió: " + dominant, width / 2, 10);
+
+      // Mostra el vídeo si hi ha detecció
+      if (detections.length > 0) {
+        image(video, width - 140, height - 140, 120, 120);
+      }
+    }
+
+    // Dibuixa diferents figures depenent de l'estat emocional
+    function drawArt(dominant, intensity) {
+      noFill();
+      strokeWeight(4);
+
+      switch (dominant) {
+        case 'happy':
+          stroke(255,200,0); // groc
+          beginShape(); //Cara
+vertex(131, 112.1875);
+vertex(141, 105.1875);
+vertex(141, 93.1875);
+vertex(145, 84.1875);
+vertex(155, 75.1875);
+vertex(163, 73.1875);
+vertex(160, 61.1875);
+vertex(163, 56.1875);
+vertex(170, 54.1875);
+vertex(176, 63.1875);
+vertex(178, 69.1875);
+vertex(186, 69.1875);
+vertex(193, 69.1875);
+vertex(191, 58.1875);
+vertex(198, 54.1875);
+vertex(205, 54.1875);
+vertex(210, 60.1875);
+vertex(211, 68.1875);
+vertex(224, 68.1875);
+vertex(224, 60.1875);
+vertex(227, 53.1875);
+vertex(234, 53.1875);
+vertex(239, 57.1875);
+vertex(242, 67.1875);
+vertex(251, 69.1875);
+vertex(256, 61.1875);
+vertex(265, 57.1875);
+vertex(268, 63.1875);
+vertex(266, 73.1875);
+vertex(277, 77.1875);
+vertex(284, 82.1875);
+vertex(287, 93.1875);
+vertex(287, 104.1875);
+vertex(294, 109.1875);
+vertex(297, 120.1875);
+vertex(298, 131.1875);
+vertex(297, 142.1875);
+vertex(300, 152.1875);
+vertex(297, 158.1875);
+vertex(289, 161.1875);
+vertex(285, 165.1875);
+vertex(288, 185.1875);
+vertex(289, 219.1875);
+vertex(289, 253.1875);
+vertex(288, 268.1875);
+vertex(284, 276.1875);
+vertex(279, 283.1875);
+vertex(264, 288.1875);
+vertex(251, 289.1875);
+vertex(219, 290.1875);
+vertex(213, 292.1875);
+vertex(214, 304.1875);
+vertex(214, 323.1875);
+vertex(214, 337.1875);
+vertex(206, 334.1875);
+vertex(197, 339.1875);
+vertex(201, 315.1875);
+vertex(200, 300.1875);
+vertex(198, 293.1875);
+vertex(178, 291.1875);
+vertex(151, 290.1875);
+vertex(141, 282.1875);
+vertex(132, 272.1875);
+vertex(131, 257.1875);
+vertex(130, 236.1875);
+vertex(130, 213.1875);
+vertex(132, 191.1875);
+vertex(135, 167.1875);
+vertex(128, 164.1875);
+vertex(124, 157.1875);
+vertex(127, 139.1875);
+vertex(128, 125.1875);
+vertex(129, 110.1875);
+endShape(CLOSE);
+          beginShape(); // Mà dreta exterior
+vertex(329, 164.1875);
+vertex(321, 168.1875);
+vertex(314, 174.1875);
+vertex(310, 184.1875);
+vertex(310, 194.1875);
+vertex(312, 207.1875);
+vertex(323, 226.1875);
+vertex(334, 236.1875);
+vertex(347, 242.1875);
+vertex(354, 247.1875);
+vertex(354, 254.1875);
+vertex(356, 266.1875);
+vertex(361, 278.1875);
+vertex(369, 283.1875);
+vertex(382, 282.1875);
+vertex(394, 276.1875);
+vertex(399, 274.1875);
+vertex(401, 269.1875);
+vertex(403, 253.1875);
+vertex(415, 243.1875);
+vertex(422, 239.1875);
+vertex(427, 222.1875);
+vertex(427, 222.1875);
+vertex(427, 222.1875);
+vertex(431, 211.1875);
+vertex(431, 151.1875);
+vertex(429, 120.1875);
+vertex(429, 40.1875);
+vertex(412, 27.1875);
+vertex(396, 19.1875);
+vertex(382, 19.1875);
+vertex(365, 21.1875);
+vertex(347, 28.1875);
+vertex(330, 35.1875);
+vertex(315, 51.1875);
+vertex(309, 69.1875);
+vertex(309, 86.1875);
+vertex(317, 117.1875);
+vertex(322, 132.1875);
+vertex(328, 144.1875);
+vertex(330, 157.1875);
+vertex(330, 161.1875);
+endShape(CLOSE);
+          beginShape(); //Mà dreta interior
+vertex(388, 224.1875);
+vertex(395, 223.1875);
+vertex(398, 226.1875);
+vertex(403, 227.1875);
+vertex(402, 234.1875);
+vertex(396, 239.1875);
+vertex(392, 245.1875);
+vertex(365, 244.1875);
+vertex(358, 237.1875);
+vertex(349, 231.1875);
+vertex(344, 225.1875);
+vertex(348, 220.1875);
+vertex(347, 211.1875);
+vertex(343, 204.1875);
+vertex(338, 196.1875);
+vertex(332, 186.1875);
+vertex(330, 176.1875);
+vertex(330, 167.1875);
+vertex(330, 157.1875);
+vertex(328, 145.1875);
+vertex(324, 137.1875);
+vertex(326, 130.1875);
+vertex(333, 132.1875);
+vertex(338, 141.1875);
+vertex(340, 149.1875);
+vertex(342, 159.1875);
+vertex(345, 163.1875);
+vertex(346, 151.1875);
+vertex(350, 140.1875);
+vertex(351, 129.1875);
+vertex(354, 111.1875);
+vertex(354, 111.1875);
+vertex(355, 99.1875);
+vertex(360, 86.1875);
+vertex(365, 89.1875);
+vertex(366, 98.1875);
+vertex(364, 109.1875);
+vertex(363, 121.1875);
+vertex(363, 129.1875);
+vertex(362, 139.1875);
+vertex(366, 136.1875);
+vertex(368, 126.1875);
+vertex(369, 110.1875);
+vertex(369, 110.1875);
+vertex(371, 96.1875);
+vertex(374, 83.1875);
+vertex(378, 80.1875);
+vertex(378, 80.1875);
+vertex(381, 89.1875);
+vertex(379, 105.1875);
+vertex(377, 122.1875);
+vertex(377, 137.1875);
+vertex(381, 138.1875);
+vertex(382, 127.1875);
+vertex(383, 110.1875);
+vertex(384, 97.1875);
+vertex(384, 97.1875);
+vertex(389, 91.1875);
+vertex(392, 97.1875);
+vertex(392, 110.1875);
+vertex(391, 123.1875);
+vertex(391, 130.1875);
+vertex(390, 143.1875);
+vertex(393, 145.1875);
+vertex(395, 138.1875);
+vertex(397, 129.1875);
+vertex(398, 117.1875);
+vertex(403, 111.1875);
+vertex(404, 124.1875);
+vertex(403, 140.1875);
+vertex(401, 159.1875);
+vertex(400, 172.1875);
+vertex(399, 184.1875);
+vertex(399, 193.1875);
+vertex(393, 203.1875);
+vertex(388, 212.1875);
+vertex(387, 222.1875);
+endShape(CLOSE);
+beginShape(); //Mà esquerra
+vertex(1, 86.1875);
+vertex(7, 77.1875);
+vertex(19, 64.1875);
+vertex(37, 53.1875);
+vertex(63, 48.1875);
+vertex(85, 48.1875);
+vertex(103, 56.1875);
+vertex(112, 71.1875);
+vertex(118, 99.1875);
+vertex(118, 126.1875);
+vertex(112, 149.1875);
+vertex(100, 179.1875);
+vertex(92, 194.1875);
+vertex(97, 201.1875);
+vertex(104, 210.1875);
+vertex(102, 216.1875);
+vertex(104, 217.1875);
+vertex(100, 224.1875);
+vertex(94, 235.1875);
+vertex(88, 242.1875);
+vertex(70, 251.1875);
+vertex(70, 259.1875);
+vertex(73, 271.1875);
+vertex(66, 279.1875);
+vertex(48, 284.1875);
+vertex(34, 284.1875);
+vertex(27, 264.1875);
+vertex(27, 252.1875);
+vertex(11, 243.1875);
+vertex(6, 227.1875);
+vertex(4, 181.1875);
+vertex(0, 154.1875);
+vertex(1, 88.1875);
+endShape(CLOSE);
+
+          break;
+
+        case 'sad':
+          stroke(50,100,200,150); // blau
+          beginShape();
+          for (let x = 0; x <= 400; x += 40)
+            vertex(200 + x, 300 + 100 * intensity);
+          for (let x = 400; x >= 0; x -= 40)
+            vertex(200 + x, 300 - 50 * intensity);
+          endShape(CLOSE);
+          break;
+
+        case 'angry':
+          stroke(200,0,0,150); // vermell
+          beginShape();
+          for (let i = 0; i < 16; i++) {
+            let angle = map(i, 0, 16, 0, TWO_PI);
+            let r = i % 2 ? 100 : 175;
+            let x = VIRTUAL_W/2 + r * cos(angle);
+            let y = VIRTUAL_H/2 + r * sin(angle);
+            vertex(x, y);
+          }
+          endShape(CLOSE);
+          break;
+
+        case 'fearful':
+          stroke(100,100,100,150); // gris
+          beginShape();
+          for (let x = 0; x <= VIRTUAL_W; x += 10) {
+            let y = VIRTUAL_H/2 + 50 * sin((x - VIRTUAL_W/2) * 0.05) * intensity;
+            vertex(x, y);
+          }
+          endShape();
+          break;
+
+        case 'surprised':
+          stroke(0,150,255,150); // blau clar
+          beginShape();
+          for (let i = 0; i < 20; i++) {
+            let angle = random(TWO_PI);
+            let r = 50 + 100 * intensity;
+            let x = VIRTUAL_W/2 + r * cos(angle);
+            let y = VIRTUAL_H/2 + r * sin(angle);
+            vertex(x, y);
+          }
+          endShape(CLOSE);
+          break;
+
+        case 'disgusted':
+          stroke(0,150,0,150); // verd
+          beginShape();
+          for (let i = 0; i < 12; i++) {
+            let angle = map(i, 0, 12, 0, TWO_PI);
+            let r = 75 + random(-50, 50) * intensity;
+            let x = VIRTUAL_W/2 + r * cos(angle);
+            let y = VIRTUAL_H/2 + r * sin(angle);
+            vertex(x, y);
+          }
+          endShape(CLOSE);
+          break;
+
+        default:
+          stroke(150,150,150,150); // gris suau
+          beginShape();
+          vertex(0, 0);
+          vertex(VIRTUAL_W, 0);
+          vertex(VIRTUAL_W, VIRTUAL_H);
+          vertex(0, VIRTUAL_H);
+          endShape(CLOSE);
+      }
+    }
+  </script>
+</body>
+</html>
