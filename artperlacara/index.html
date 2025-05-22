@@ -144,11 +144,17 @@
         image(video, width - 432, height - 622);
       }
     }
-
+    let t = 0; // Variable de temps
+let yOffset = 0;
     // Dibuixa diferents figures depenent de l'estat emocional
     function drawArt(dominant, intensity) {
       noFill();
       strokeWeight(4);
+       // Moviment
+  yOffset = sin(t) * 5; // Amplitud del moviment
+  t += 0.05;            // Velocitat del moviment
+       push();
+  translate(0, yOffset); // Desplaçament vertical
 
       switch (dominant) {
         case 'happy':
@@ -903,78 +909,117 @@ endShape(CLOSE);
           break;
 
         case 'sad':
-          stroke(50,100,200,150); // blau
-          beginShape();
-          beginShape();
-vertex(169, 57.1875);
-vertex(163, 59.1875);
-vertex(161, 68.1875);
-vertex(163, 77.1875);
-vertex(155, 80.1875);
-vertex(148, 85.1875);
-vertex(143, 96.1875);
-vertex(141, 110.1875);
-vertex(133, 116.1875);
-vertex(131, 127.1875);
-vertex(130, 144.1875);
-vertex(126, 157.1875);
-vertex(131, 169.1875);
-vertex(136, 181.1875);
-vertex(134, 195.1875);
-vertex(132, 225.1875);
-vertex(134, 252.1875);
-vertex(135, 275.1875);
-vertex(151, 290.1875);
-vertex(177, 292.1875);
-vertex(196, 296.1875);
-vertex(199, 305.1875);
-vertex(201, 329.1875);
-vertex(196, 341.1875);
-vertex(200, 340.1875);
-vertex(205, 337.1875);
-vertex(211, 339.1875);
-vertex(216, 345.1875);
-vertex(215, 316.1875);
+          stroke(50,100,200,150); // Blau
+         beginShape(); //Cara
+vertex(162, 73.1875);
+vertex(154, 76.1875);
+vertex(146, 82.1875);
+vertex(142, 94.1875);
+vertex(141, 107.1875);
+vertex(134, 110.1875);
+vertex(129, 119.1875);
+vertex(128, 138.1875);
+vertex(125, 161.1875);
+vertex(133, 167.1875);
+vertex(133, 184.1875);
+vertex(130, 212.1875);
+vertex(130, 252.1875);
+vertex(131, 267.1875);
+vertex(135, 279.1875);
+vertex(145, 287.1875);
+vertex(162, 292.1875);
+vertex(172, 293.1875);
+vertex(188, 292.1875);
+vertex(200, 292.1875);
+vertex(201, 300.1875);
+vertex(198, 304.1875);
+vertex(201, 311.1875);
+vertex(199, 326.1875);
+vertex(197, 340.1875);
+vertex(203, 337.1875);
+vertex(209, 335.1875);
+vertex(213, 338.1875);
+vertex(216, 341.1875);
 vertex(215, 295.1875);
-vertex(232, 291.1875);
-vertex(259, 288.1875);
-vertex(276, 284.1875);
-vertex(290, 270.1875);
-vertex(288, 244.1875);
-vertex(290, 225.1875);
-vertex(291, 203.1875);
-vertex(287, 171.1875);
-vertex(287, 167.1875);
-vertex(297, 160.1875);
-vertex(299, 153.1875);
-vertex(298, 137.1875);
-vertex(296, 118.1875);
-vertex(292, 108.1875);
-vertex(285, 104.1875);
-vertex(283, 87.1875);
-vertex(277, 80.1875);
-vertex(267, 72.1875);
-vertex(268, 62.1875);
-vertex(260, 59.1875);
-vertex(251, 67.1875);
-vertex(236, 69.1875);
-vertex(236, 56.1875);
-vertex(226, 55.1875);
-vertex(221, 65.1875);
-vertex(211, 69.1875);
-vertex(208, 56.1875);
+vertex(221, 292.1875);
+vertex(237, 290.1875);
+vertex(247, 290.1875);
+vertex(262, 288.1875);
+vertex(273, 286.1875);
+vertex(280, 280.1875);
+vertex(287, 271.1875);
+vertex(291, 253.1875);
+vertex(291, 253.1875);
+vertex(291, 228.1875);
+vertex(288, 197.1875);
+vertex(284, 163.1875);
+vertex(298, 156.1875);
+vertex(297, 145.1875);
+vertex(298, 132.1875);
+vertex(297, 121.1875);
+vertex(296, 112.1875);
+vertex(292, 105.1875);
+vertex(286, 101.1875);
+vertex(287, 88.1875);
+vertex(282, 81.1875);
+vertex(274, 76.1875);
+vertex(268, 73.1875);
+vertex(269, 62.1875);
+vertex(264, 58.1875);
+vertex(256, 59.1875);
+vertex(252, 68.1875);
+vertex(241, 68.1875);
+vertex(240, 58.1875);
+vertex(235, 52.1875);
+vertex(228, 54.1875);
+vertex(224, 61.1875);
+vertex(223, 67.1875);
+vertex(211, 66.1875);
+vertex(209, 58.1875);
 vertex(201, 53.1875);
-vertex(193, 57.1875);
-vertex(195, 66.1875);
-vertex(186, 71.1875);
-vertex(178, 71.1875);
-vertex(173, 59.1875);
+vertex(193, 56.1875);
+vertex(193, 67.1875);
+vertex(186, 68.1875);
+vertex(178, 70.1875);
+vertex(172, 56.1875);
+vertex(165, 54.1875);
+vertex(160, 60.1875);
+vertex(163, 72.1875);
 endShape(CLOSE);
-          for (let x = 0; x <= 400; x += 40)
-            vertex(200 + x, 300 + 100 * intensity);
-          for (let x = 400; x >= 0; x -= 40)
-            vertex(200 + x, 300 - 50 * intensity);
-          endShape(CLOSE);
+          beginShape(); //Cella esquerra
+vertex(204, 83.1875);
+vertex(193, 86.1875);
+vertex(181, 86.1875);
+vertex(170, 88.1875);
+vertex(161, 93.1875);
+vertex(149, 100.1875);
+vertex(148, 109.1875);
+vertex(156, 106.1875);
+vertex(168, 101.1875);
+vertex(180, 100.1875);
+vertex(194, 99.1875);
+vertex(204, 92.1875);
+vertex(205, 85.1875);
+endShape();
+beginShape(); //Cella dreta
+vertex(220, 83.1875);
+vertex(229, 89.1875);
+vertex(238, 90.1875);
+vertex(249, 90.1875);
+vertex(258, 91.1875);
+vertex(272, 95.1875);
+vertex(278, 99.1875);
+vertex(277, 105.1875);
+vertex(269, 107.1875);
+vertex(259, 103.1875);
+vertex(250, 102.1875);
+vertex(241, 102.1875);
+vertex(231, 98.1875);
+vertex(220, 90.1875);
+vertex(217, 85.1875);
+endShape(CLOSE);
+          
+pop();
           break;
 
         case 'angry':
