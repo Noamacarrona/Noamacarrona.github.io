@@ -150,6 +150,7 @@ let yOffset = 0;
     function drawArt(dominant, intensity) {
       noFill();
       strokeWeight(4);
+  if (emotion === 'happy') {
        // Moviment
   yOffset = sin(t) * 5; // Amplitud del moviment
   t += 0.05;            // Velocitat del moviment
