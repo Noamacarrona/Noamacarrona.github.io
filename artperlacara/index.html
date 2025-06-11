@@ -150,7 +150,8 @@ let yOffset = 0;
     function drawArt(dominant, intensity) {
       noFill();
       strokeWeight(4);
-     
+
+      switch (dominant) {
         case 'happy':
           stroke(255, 204, 0); // groc
           beginShape(); //Cara
